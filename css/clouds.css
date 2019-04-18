@@ -1,0 +1,52 @@
+
+.cloud {
+  animation: 20s cloud linear infinite;
+  background-color: white;
+  border-radius: 100%;
+  box-shadow: 7vmax 1vmax white, -4vmax 5vmax white, 2vmax 6vmax white, 9vmax 5vmax white, 0 0.5vmax 1vmax rgba(0, 0, 0, 0.125), 7vmax 1.5vmax 1vmax rgba(0, 0, 0, 0.125), -4vmax 5.5vmax 1vmax rgba(0, 0, 0, 0.125), 2vmax 6.5vmax 1vmax rgba(0, 0, 0, 0.125), 9vmax 5.5vmax 1vmax rgba(0, 0, 0, 0.125);
+  height: 10vmax;
+  left: 4vmax;
+  position: absolute;
+  top: 50vmax;
+  width: 10vmax;
+  z-index:5;
+}
+.cloud:nth-child(2) {
+  animation-direction: reverse;
+  animation-duration: 15s;
+  padding: 1.5vmax;
+  top: 20vmax;
+  transform: rotateY(180deg) scale(1.25, 1);
+}
+.bigcloud:nth-child(1) {
+  bottom: 3vmax;
+  animation-direction: reverse;
+  animation-duration: 25s;
+  animation-name: large-cloud;
+  padding: 1vmax;
+  top: auto;
+  transform: scale(4);
+}
+.bigcloud:nth-child(2) {
+  animation-duration: 30s;
+  animation-name: large-cloud;
+  bottom: 7vmax;
+  top: auto;
+  transform: rotateY(180deg) scale(3, 2);
+}
+@keyframes cloud {
+  from {
+    left: 150%;
+  }
+  to {
+    left: -50%;
+  }
+}
+@keyframes large-cloud {
+  from {
+    left: 200%;
+  }
+  to {
+    left: -150%;
+  }
+}

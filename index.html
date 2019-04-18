@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Penrod Weather</title>
+  <script src="js/jquery-3.4.0.min.js"></script>
+  <script src="js/rain.js"></script>
+  <script src="js/main.js"></script>
+  <link href="css/style.css" rel="stylesheet" />
+  <link href="css/sun.css" rel="stylesheet" />
+  <link href="css/cloud.css" rel="stylesheet" />
+  <link href="css/clouds.css" rel="stylesheet" />
+  <link href="css/rain.css" rel="stylesheet" />
+  <link href="css/salesforce-lightning-design-system-2.8.3/assets/styles/salesforce-lightning-design-system.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="content">
+    <div class="content__nav">
+      <ul class="slds-list_horizontal" id="content__nav-cities">
+        <li class="milwaukee selected slds-align_absolute-center content__nav-cities-li"><a href="#" id="milwaukee-button"><span>Milwaukee</span></a></li>
+        <li class="chicago slds-align_absolute-center content__nav-cities-li"><a href="#" id="chicago-button"><span>Chicago</span></a></li>
+        <li class="minneapolis slds-align_absolute-center content__nav-cities-li"><a href="#" id="minneapolis-button"><span>Minneapolis</span></a></li>
+        <li class="dallas slds-align_absolute-center content__nav-cities-li"><a href="#" id="dallas-button"><span>Dallas</span></a></li>
+      </ul>
+    </div>
+    <div class="slds-align_absolute-center content__header">
+      <h1>Penrod Weather</h1>
+    </div>
+    <div class="row content__weather">
+      <!-- Hourly weather table -->
+      <div class="column1">
+        <ul class="content__weather-hourly">
+          <li id="content__weather-hourly-today" class="slds-border_bottom">Today</li>
+          <li class="slds-border_bottom">
+            <ul class="slds-list_horizontal content__weather-hourly-row">
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-0-1"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-0-2"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-0-3"><img src=""></span>
+              </li>
+            </ul>
+          </li>
+          <li class="slds-border_bottom">
+            <ul class="slds-list_horizontal content__weather-hourly-row">
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-1-1"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-1-2"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-1-3"><img src=""></span>
+              </li>
+            </ul>
+          </li>
+          <li class="slds-border_bottom">
+            <ul class="slds-list_horizontal content__weather-hourly-row">
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-2-1"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-2-2"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-2-3"><img src=""></span>
+              </li>
+            </ul>
+          </li>
+          <li class="slds-border_bottom">
+            <ul class="slds-list_horizontal content__weather-hourly-row">
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-3-1"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-3-2"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-3-3"><img src=""></span>
+              </li>
+            </ul>
+          </li>
+          <li class="slds-border_bottom">
+            <ul class="slds-list_horizontal content__weather-hourly-row">
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-4-1"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-4-2"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-4-3"><img src=""></span>
+              </li>
+            </ul>
+          </li>
+          <li class="slds-border_bottom">
+            <ul class="slds-list_horizontal content__weather-hourly-row">
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-5-1"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-5-2"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-5-3"><img src=""></span>
+              </li>
+            </ul>
+          </li>
+          <li class="slds-border_bottom">
+            <ul class="slds-list_horizontal content__weather-hourly-row">
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-6-1"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-6-2"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-6-3"><img src=""></span>
+              </li>
+            </ul>
+          </li>
+          <li class="slds-border_bottom">
+            <ul class="slds-list_horizontal content__weather-hourly-row">
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-7-1"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-7-2"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-hourly-detail">
+                <span id="content__weather-hourly-detail-7-3"><img src=""></span>
+              </li>
+            </ul>
+          </li>
+
+        </ul>
+      </div>
+
+      <!-- Current weather display and animations/images -->
+      <div class="column2">
+        <div id="content__weather-spinner" class="spinner" style="height: 6rem;">
+          <div role="status" class="slds-spinner slds-spinner_medium">
+            <span class="slds-assistive-text">Loading</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+          </div>
+        </div>
+
+        <div class="content__weather-container">
+
+          <!-- CLOUDS -->
+          <div class="toggles hide" id="content__weather-small-clouds">
+            <div class="cloud"></div>
+            <div class="cloud"></div>
+          </div>
+          <div class="toggles hide" id="content__weather-big-clouds">
+            <div class="cloud bigcloud"></div>
+            <div class="cloud bigcloud"></div>
+          </div>
+
+          <!-- RAIN -->
+          <div class="toggles hide rain"></div>
+
+          <!-- TEMPERATURE DISPLAY -->
+          <span class="toggles slds-align_absolute-center" id="temperature"></span>
+
+          <!-- TIME DISPLAY -->
+          <div class="slds-align_absolute-center" id="time"></div>
+
+          <!-- SUN -->
+          <div class="hide toggles content__weather-container-sun">
+            <svg class="svg-sun" version="1.1" viewBox="0 0 100 100" preserveAspectRatio="xMinYMin meet">
+              <circle cx="50" cy="50" r="35" id="sun"></circle>
+            </svg>
+          </div>
+
+          <!-- CLOUD -->
+          <div class="toggles hide content__weather-container-cloud">
+            <img class-"cloud-animate" id="background-cloud" src="images/cloud.png">
+          </div>
+        </div>
+      </div>
+
+      <!-- Tomorrow's forecast data  -->
+      <div class="column3">
+        <ul class="content__weather-daily">
+          <li id="content__weather-hourly-tomorrow" class="slds-border_bottom">Tomorrow</li>
+          <li class="slds-border_bottom">
+            <ul class="slds-list_horizontal content__weather-daily-row">
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-0-1"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-0-2"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-0-3"><img src=""></span>
+              </li>
+            </ul>
+          </li>
+          <li class="slds-border_bottom">
+            <ul class="slds-list_horizontal content__weather-daily-row">
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-1-1"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-1-2"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-1-3"><img src=""></span>
+              </li>
+            </ul>
+          </li>
+          <li class="slds-border_bottom">
+            <ul class="slds-list_horizontal content__weather-daily-row">
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-2-1"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-2-2"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-2-3"><img src=""></span>
+              </li>
+            </ul>
+          </li>
+          <li class="slds-border_bottom">
+            <ul class="slds-list_horizontal content__weather-daily-row">
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-3-1"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-3-2"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-3-3"><img src=""></span>
+              </li>
+            </ul>
+          </li>
+          <li class="slds-border_bottom">
+            <ul class="slds-list_horizontal content__weather-daily-row">
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-4-1"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-4-2"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-4-3"><img src=""></span>
+              </li>
+            </ul>
+          </li>
+          <li class="slds-border_bottom">
+            <ul class="slds-list_horizontal content__weather-daily-row">
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-5-1"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-5-2"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-5-3"><img src=""></span>
+              </li>
+            </ul>
+          </li>
+          <li class="slds-border_bottom">
+            <ul class="slds-list_horizontal content__weather-daily-row">
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-6-1"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-6-2"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-6-3"><img src=""></span>
+              </li>
+            </ul>
+          </li>
+          <li class="slds-border_bottom">
+            <ul class="slds-list_horizontal content__weather-daily-row">
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-7-1"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-7-2"></span>
+              </li>
+              <li class="slds-align_absolute-center content__weather-daily-detail">
+                <span id="content__weather-daily-detail-7-3"><img src=""></span>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="content__footer">
+      Made by Tommy Shafer
+    </div>
+
+  </body>
+  </html>
+
+
+</body>
+</html>

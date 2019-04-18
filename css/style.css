@@ -1,0 +1,229 @@
+@import url("salesforce-lightning-design-system-2.8.3/assets/styles/salesforce-lightning-design-system.css");
+
+.hide{
+  display:none;
+}
+
+.selected{
+  background-color: #1589ee;
+  color:white!important;
+}
+
+.selected a{
+  color:white;
+}
+
+.selected a:focus{
+  color:white!important;
+}
+
+.content{
+  max-width:1000px;
+  margin: 0 auto;
+  box-shadow: 0px 0px 18px #888888;
+}
+
+.content__nav{
+  width:100%;
+  margin-top: 0px;
+  background:#e8e8e8;
+  position:relative;
+  border:2px solid #dddbda;
+  border-bottom:0px;
+  z-index: 10;
+}
+
+#content__nav-cities{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.content__nav-cities-li{
+  width:25%;
+  list-style: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.content__nav-cities-li a{
+  font-size:24px;
+  padding-top:5px;
+  padding-bottom: 5px;
+  margin:auto;
+  text-align: center;
+  display:block;
+  width:100%;
+}
+
+.content__header{
+  font-size: 36px;
+  color: #ffffff;
+  background-color: #1589ee;
+  z-index: 10;
+  position: relative;
+  border: 2px solid #dddbda;
+  border-top: 0px;
+}
+
+.content__header h1{
+  padding:25px;
+}
+
+.column1 {
+  float:left;
+  position:relative;
+  width:30%;
+  z-index: 10;
+  background: white;
+  max-width: 360px;
+  background:#e8e8e8;
+  border:2px solid #dddbda;
+  border-top: 0px;
+}
+#content__weather-hourly-today{
+  text-align: center;
+  background: #1589ee;
+  color:white;
+  height:20px;
+}
+
+.content__weather-hourly-row{
+  height:74px;
+}
+
+.column1 ul li{
+  width:100%;
+}
+.column1 ul.content__weather-hourly li{
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+.column1 ul.content__weather-hourly li ul li{
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.column2 {
+  float:left;
+  width:40%;
+}
+
+#time{
+  margin:0 auto;
+  top:100px;
+  font-size: 30px;
+  text-align: center;
+  width:100%;
+  height:75px;
+}
+
+#temperature{
+  height:100px;
+  width:100px;
+  left:calc(50% - 48px);
+  top:320px;
+  position:absolute;
+  z-index: 10;
+  font-size: 60px;
+  z-index:2;
+  color: black;
+  -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: black;
+}
+
+.content__weather-container-cloud{
+  width:75%;
+  margin: 0 auto;
+  padding-top:30px;
+}
+
+.column3 {
+  float:left;
+  position:relative;
+  width:30%;
+  z-index: 10;
+  background: white;
+  max-width: 360px;
+  background:#e8e8e8;
+  border:2px solid #dddbda;
+  border-top: 0px;
+}
+
+#content__weather-hourly-tomorrow{
+  text-align: center;
+  background: #1589ee;
+  color:white;
+  height:20px;
+}
+
+.content__weather-daily-row{
+  height:74px;
+}
+
+.column3 ul li{
+  width:100%;
+}
+.column3 ul.content__weather-hourly li{
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+.column3 ul.content__weather-hourly li ul li{
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.content__weather-hourly{
+  z-index: 100;
+}
+
+.spinner{
+  position:absolute;
+  top:50%;
+  left:50%;
+  z-index: 100;
+  height:0px!important;
+}
+
+.content__weather-container{
+  height:625px;
+}
+
+
+.content__footer{
+  position:relative;
+  text-align: center;
+  z-index: 10;
+  background: #e8e8e8;
+  font-size: 16px;
+  top: -4px;
+  border:2px solid #dddbda;
+}
+
+.error_message{
+  font-size: 30px;
+  text-align: center;
+}
+
+.sunny{
+  background-color: rgba(21,137,238,0.4)!important;
+}
+
+.cloudy{
+  background-color: #c9c7c5!important;
+}
+
+.night{
+  background-color: #1f263b!important;
+}
+
+#time.night{
+  color:white;
+}
