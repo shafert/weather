@@ -4,6 +4,7 @@ $(document).ready(function() {
   const CHICAGO_CODE = 4887398;
   const MINNEAPOLIS_CODE = 5037649;
   const DALLAS_CODE = 4684888;
+  const APPID = "5dfa9c5274bb50d7ada514fc482db59d";
   var milwaukee = [];
   var chicago = [];
   var minneapolis = [];
@@ -33,7 +34,7 @@ $(document).ready(function() {
 
   // This function hits the current weather API for all 4 cities. The data is stored and then the page is built with the milwaukee information
   function onLoadCurrent(callback) {
-    var url = 'http://api.openweathermap.org/data/2.5/group?id='+ MILWAUKEE_CODE + ',' + CHICAGO_CODE + ',' + MINNEAPOLIS_CODE +',' + DALLAS_CODE + '&units=imperial&APPID=5dfa9c5274bb50d7ada514fc482db59d';
+    var url = 'http://api.openweathermap.org/data/2.5/group?id='+ MILWAUKEE_CODE + ',' + CHICAGO_CODE + ',' + MINNEAPOLIS_CODE +',' + DALLAS_CODE + '&units=imperial&APPID=' + APPID;
     $.ajax({
       dataType: "jsonp",
       url: url,
@@ -53,7 +54,7 @@ $(document).ready(function() {
 
   // Gets the current hourly weather forecast for milwaukee and then calls the function to display it
   function onLoadHourly(callback) {
-    var url = 'http://api.openweathermap.org/data/2.5/forecast/hourly?id='+ MILWAUKEE_CODE + '&units=imperial&APPID=5dfa9c5274bb50d7ada514fc482db59d';
+    var url = 'http://api.openweathermap.org/data/2.5/forecast/hourly?id='+ MILWAUKEE_CODE + '&units=imperial&APPID=' + APPID;
     $.ajax({
       dataType: "jsonp",
       url: url,
@@ -70,7 +71,7 @@ $(document).ready(function() {
 
   // Gets the future weather forecast for milwaukee and then calls the function to display it
   function onLoadTomorrow(callback) {
-    var url = 'http://api.openweathermap.org/data/2.5/forecast?id='+ MILWAUKEE_CODE + '&units=imperial&APPID=5dfa9c5274bb50d7ada514fc482db59d';
+    var url = 'http://api.openweathermap.org/data/2.5/forecast?id='+ MILWAUKEE_CODE + '&units=imperial&APPID=' + APPID;
     $.ajax({
       dataType: "jsonp",
       url: url,
@@ -92,7 +93,7 @@ $(document).ready(function() {
 
   // This function gathers the rest of the hourly weaather data for the remaining cities
   function hourlyAll(updateHourly){
-    var url = 'http://api.openweathermap.org/data/2.5/forecast/hourly?id='+CHICAGO_CODE+'&units=imperial&APPID=5dfa9c5274bb50d7ada514fc482db59d';
+    var url = 'http://api.openweathermap.org/data/2.5/forecast/hourly?id='+CHICAGO_CODE+'&units=imperial&APPID=' + APPID;
     $.ajax({
       dataType: "jsonp",
       url: url,
@@ -105,7 +106,7 @@ $(document).ready(function() {
       }
     });
 
-    url = 'http://api.openweathermap.org/data/2.5/forecast/hourly?id='+MINNEAPOLIS_CODE+'&units=imperial&APPID=5dfa9c5274bb50d7ada514fc482db59d';
+    url = 'http://api.openweathermap.org/data/2.5/forecast/hourly?id='+MINNEAPOLIS_CODE+'&units=imperial&APPID=' + APPID;
     $.ajax({
       dataType: "jsonp",
       url: url,
@@ -118,7 +119,7 @@ $(document).ready(function() {
       }
     });
 
-    url = 'http://api.openweathermap.org/data/2.5/forecast/hourly?id='+DALLAS_CODE+'&units=imperial&APPID=5dfa9c5274bb50d7ada514fc482db59d';
+    url = 'http://api.openweathermap.org/data/2.5/forecast/hourly?id='+DALLAS_CODE+'&units=imperial&APPID=' + APPID;
     $.ajax({
       dataType: "jsonp",
       url: url,
@@ -134,7 +135,7 @@ $(document).ready(function() {
 
   // This function gathers the rest of the hourly weaather data for the remaining cities
   function tomorrowAll(updateTomorrow){
-    var url = 'http://api.openweathermap.org/data/2.5/forecast?id='+CHICAGO_CODE+'&units=imperial&APPID=5dfa9c5274bb50d7ada514fc482db59d';
+    var url = 'http://api.openweathermap.org/data/2.5/forecast?id='+CHICAGO_CODE+'&units=imperial&APPID=' + APPID;
     $.ajax({
       dataType: "jsonp",
       url: url,
@@ -147,7 +148,7 @@ $(document).ready(function() {
       }
     });
 
-    url = 'http://api.openweathermap.org/data/2.5/forecast?id='+MINNEAPOLIS_CODE+'&units=imperial&APPID=5dfa9c5274bb50d7ada514fc482db59d';
+    url = 'http://api.openweathermap.org/data/2.5/forecast?id='+MINNEAPOLIS_CODE+'&units=imperial&APPID=' + APPID;
     $.ajax({
       dataType: "jsonp",
       url: url,
@@ -160,7 +161,7 @@ $(document).ready(function() {
       }
     });
 
-    url = 'http://api.openweathermap.org/data/2.5/forecast?id='+DALLAS_CODE+'&units=imperial&APPID=5dfa9c5274bb50d7ada514fc482db59d';
+    url = 'http://api.openweathermap.org/data/2.5/forecast?id='+DALLAS_CODE+'&units=imperial&APPID=' + APPID;
     $.ajax({
       dataType: "jsonp",
       url: url,
