@@ -270,10 +270,6 @@ $(document).ready(function() {
 
     // Determine whether it is nighttime or daytime
     var curDate = new Date();
-    //var sunrise = new Date(city[0].sys.sunrise*1000);
-    //console.log(sunrise);
-    console.log(curDate.getTime());
-    console.log(city[0].sys.sunset*1000);
     if(curDate.getTime() >= city[0].sys.sunset*1000 || curDate.getTime() <= city[0].sys.sunrise*1000){
       $(".content__weather-container-sun").addClass("hide");
       $(".content__weather-container").removeClass("sunny");
