@@ -279,6 +279,11 @@ $(document).ready(function() {
       $("html").removeClass("cloudy");
       $("html").addClass("night");
       $("#time").addClass("night");
+      // Displaying a cloud or a moon
+      if(city[0].clouds.all < 70){
+        $(".content__weather-container-cloud").addClass("hide");
+        $(".content__weather-container-moon").removeClass("hide");
+      }
     }else{
       $("html").removeClass("night");
       $(".content__weather-container").removeClass("night");
