@@ -315,6 +315,12 @@ $(document).ready(function() {
       }
       $(".rain").removeClass("hide");
     }
+    else if(city[0].weather[0].main == "Snow"){
+      $("#background-cloud").removeClass("cloud-animate");
+      $(".content__weather-container-sun").addClass("hide");
+      $(".content__weather-container-cloud").addClass("hide");
+      $(".content__weather-container-snow").removeClass("hide");
+    }
   }
 
   // These update the page information when a new city is selected
