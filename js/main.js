@@ -1,9 +1,9 @@
 $(document).ready(function() {
   const TABLE_ROWS = 8;
-  const MILWAUKEE_CODE = 5263045;
-  const CHICAGO_CODE = 4887398;
-  const MINNEAPOLIS_CODE = 5037649;
-  const DALLAS_CODE = 4684888;
+  const MILWAUKEE_CODE = "5263045";
+  const CHICAGO_CODE = "4887398";
+  const MINNEAPOLIS_CODE = "5037649";
+  const DALLAS_CODE = "4684888";
   const APPID = "5dfa9c5274bb50d7ada514fc482db59d";
   var milwaukee = [];
   var chicago = [];
