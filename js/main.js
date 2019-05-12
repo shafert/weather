@@ -5,12 +5,19 @@ $(document).ready(function() {
   const MINNEAPOLIS_CODE = "5037649";
   const DALLAS_CODE = "4684888";
   const APPID = "5dfa9c5274bb50d7ada514fc482db59d";
+  const CLOUD_NO_COVERAGE = 10;
+  const CLOUD_LOW_COVERAGE = 30;
+  const CLOUD_HI_COVERAGE = 70;
+  const UNIX_FIX = 1000;
+  const RAIN = "Rain";
+  const DRIZZLE = "Drizzle";
+  const SNOW = "Snow";
   var milwaukee = [];
   var chicago = [];
   var minneapolis = [];
   var dallas = [];
   var raining = false;
-  var drops = 500;
+  var drops;
 
   // Main code block which calls the functions that hit the API and begin to construct the page
   try{
@@ -40,10 +47,10 @@ $(document).ready(function() {
       url: url,
       jsonCallback: 'jsonp',
       success: function (data) {
-        milwaukee[0] = data.list[0];
-        chicago[0] = data.list[1];
-        minneapolis[0] = data.list[2];
-        dallas[0] = data.list[3];
+        milwaukee.current = data.list[0];
+        chicago.current = data.list[1];
+        minneapolis.current = data.list[2];
+        dallas.current = data.list[3];
         callback(milwaukee);
       },
       error: function(XMLHttpRequest, textStatus, errorThrown){
@@ -194,7 +201,7 @@ $(document).ready(function() {
       NOTE: This is the preferred way, but doesn't work outside of Chrome
 
       var dateString = new Date(city[1].list[i].dt_txt + " UTC").toLocaleTimeString();
-      //var num = d1.toLocaleTimeString("en-US", {timeZone: "America/Chicago"}).split(":")[0];
+      //var num = d1.toLocaleTimeString("en-US", {timeZone: "America/Chicago"}).split(":").current;
       var am_pm = dateString.split(" ")[1];
       */
       $("#content__weather-hourly-detail-"+i+"-1").text(hr + " " + am_pm);
@@ -233,26 +240,23 @@ $(document).ready(function() {
   function updatePage(city){
     $(".spinner").addClass("hide");
     $(".toggles").addClass("hide");
-    $("#temperature").text(Math.round(city[0].main.temp) + "°F");
+    $("#temperature").text(Math.round(city.current.main.temp) + "°F");
+    checkClouds(city);
+    checkNight(city);
+    checkPrecipitation(city);
+  }
 
+  function checkClouds(city){
     // Determine cloud cover and related effects
-    if(city[0].clouds.all < 10){
-      $("#content__weather-small-clouds").addClass("hide");
-      $("#content__weather-big-clouds").addClass("hide");
-    }
-    else if(city[0].clouds.all >= 10  && city[0].clouds.all < 30){
+    if(city.current.clouds.all >= CLOUD_NO_COVERAGE){
       $("#content__weather-small-clouds").removeClass("hide");
-      $("#content__weather-big-clouds").addClass("hide");
     }
-    else if(city[0].clouds.all >= 30){
-      $("#content__weather-small-clouds").removeClass("hide");
+    if(city.current.clouds.all >= CLOUD_LOW_COVERAGE){
       $("#content__weather-big-clouds").removeClass("hide");
     }
-
     // Determine if we are displaying sun and blue skies or cloud and grey skies
-    if(city[0].clouds.all < 70){
+    if(city.current.clouds.all < CLOUD_HI_COVERAGE){
       $("#background-cloud").removeClass("cloud-animate");
-      $(".content__weather-container-cloud").addClass("hide");
       $(".content__weather-container-sun").removeClass("hide");
       $(".content__weather-container").removeClass("cloudy");
       $("html").removeClass("cloudy");
@@ -260,17 +264,18 @@ $(document).ready(function() {
       $(".content__weather-container").addClass("sunny");
     }else{
       $("#background-cloud").addClass("cloud-animate");
-      $(".content__weather-container-sun").addClass("hide");
       $(".content__weather-container-cloud").removeClass("hide");
       $(".content__weather-container").removeClass("sunny");
       $(".content__weather-container").addClass("cloudy");
       $("html").removeClass("sunny");
       $("html").addClass("cloudy");
     }
+  }
 
+  function checkNight(city){
     // Determine whether it is nighttime or daytime
-    var curDate = new Date();
-    if(curDate.getTime() >= city[0].sys.sunset*1000 || curDate.getTime() <= city[0].sys.sunrise*1000){
+    var curTime = new Date().getTime();
+    if(curTime >= city.current.sys.sunset*UNIX_FIX || curTime <= city.current.sys.sunrise*UNIX_FIX){
       $(".content__weather-container-sun").addClass("hide");
       $(".content__weather-container").removeClass("sunny");
       $(".content__weather-container").removeClass("cloudy");
@@ -280,7 +285,7 @@ $(document).ready(function() {
       $("html").addClass("night");
       $("#time").addClass("night");
       // Displaying a cloud or a moon
-      if(city[0].clouds.all < 70){
+      if(city.current.clouds.all < CLOUD_HI_COVERAGE){
         $(".content__weather-container-cloud").addClass("hide");
         $(".content__weather-container-moon").removeClass("hide");
       }
@@ -289,10 +294,13 @@ $(document).ready(function() {
       $(".content__weather-container").removeClass("night");
       $("#time").removeClass("night");
     }
+  }
 
+  function checkPrecipitation(city){
     // Determine if it is raining, and the intensity of the rain
     // clouds are hidden to reduce screen noise
-    if(city[0].weather[0].main == "Rain"){
+    console.log(city.current);
+    if(city.current.weather[0].main == RAIN){
       $("#background-cloud").removeClass("cloud-animate");
       $("#content__weather-small-clouds").addClass("hide");
       $("#content__weather-big-clouds").addClass("hide");
@@ -306,7 +314,7 @@ $(document).ready(function() {
       }
       $(".rain").removeClass("hide");
     }
-    else if(city[0].weather[0].main == "Drizzle"){
+    else if(city.current.weather[0].main == DRIZZLE){
       $("#background-cloud").removeClass("cloud-animate");
       $("#content__weather-small-clouds").addClass("hide");
       $("#content__weather-big-clouds").addClass("hide");
@@ -320,7 +328,7 @@ $(document).ready(function() {
       }
       $(".rain").removeClass("hide");
     }
-    else if(city[0].weather[0].main == "Snow"){
+    else if(city.current.weather[0].main == SNOW){
       $("#background-cloud").removeClass("cloud-animate");
       $(".content__weather-container-sun").addClass("hide");
       $(".content__weather-container-cloud").addClass("hide");
