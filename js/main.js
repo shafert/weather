@@ -16,6 +16,10 @@ $(document).ready(function() {
   var chicago = [];
   var minneapolis = [];
   var dallas = [];
+  milwaukee.code = MILWAUKEE_CODE;
+  chicago.code = CHICAGO_CODE;
+  minneapolis.code = MINNEAPOLIS_CODE;
+  dallas.code = DALLAS_CODE;
   var raining = false;
   var drops;
 
@@ -67,7 +71,7 @@ $(document).ready(function() {
       url: url,
       jsonCallback: 'jsonp',
       success: function (data) {
-        milwaukee[1] = data;
+        milwaukee.hourly = data;
         callback(milwaukee);
       },
       error: function(XMLHttpRequest, textStatus, errorThrown){
@@ -94,90 +98,52 @@ $(document).ready(function() {
 
   // This is a helper function for loading a large chunk of data as to avoid synchronicity issues
   function loadData(city, data, callback){
-    city[2] =  data;
+    city.tomorrow = data;
     callback(city);
   }
 
   // This function gathers the rest of the hourly weaather data for the remaining cities
   function hourlyAll(updateHourly){
-    var url = 'http://api.openweathermap.org/data/2.5/forecast/hourly?id='+CHICAGO_CODE+'&units=imperial&APPID=' + APPID;
-    $.ajax({
-      dataType: "jsonp",
-      url: url,
-      jsonCallback: 'jsonp',
-      success: function (data) {
-        chicago[1] = data;
-      },
-      error: function(XMLHttpRequest, textStatus, errorThrown){
-        $(".content__weather-container").prepend("<div class=\"error_message slds-align_absolute-center\">Error fetching data. Please try again later!</div>");
-      }
-    });
+    hourlyAPICall(chicago);
+    hourlyAPICall(minneapolis);
+    hourlyAPICall(dallas);
+  }
 
-    url = 'http://api.openweathermap.org/data/2.5/forecast/hourly?id='+MINNEAPOLIS_CODE+'&units=imperial&APPID=' + APPID;
-    $.ajax({
-      dataType: "jsonp",
-      url: url,
-      jsonCallback: 'jsonp',
-      success: function (data) {
-        minneapolis[1] = data;
-      },
-      error: function(XMLHttpRequest, textStatus, errorThrown){
-        $(".content__weather-container").prepend("<div class=\"error_message slds-align_absolute-center\">Error fetching data. Please try again later!</div>");
-      }
-    });
-
-    url = 'http://api.openweathermap.org/data/2.5/forecast/hourly?id='+DALLAS_CODE+'&units=imperial&APPID=' + APPID;
-    $.ajax({
-      dataType: "jsonp",
-      url: url,
-      jsonCallback: 'jsonp',
-      success: function (data) {
-        dallas[1] = data;
-      },
-      error: function(XMLHttpRequest, textStatus, errorThrown){
-        $(".content__weather-container").prepend("<div class=\"error_message slds-align_absolute-center\">Error fetching data. Please try again later!</div>");
-      }
-    });
+  function hourlyAPICall(city){
+      var url = 'http://api.openweathermap.org/data/2.5/forecast/hourly?id='+city.code+'&units=imperial&APPID=' + APPID;
+      $.ajax({
+        dataType: "jsonp",
+        url: url,
+        jsonCallback: 'jsonp',
+        success: function (data) {
+          city.hourly = data;
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown){
+          displayError(".content__weather-container");
+          console.log(err);
+        }
+      });
   }
 
   // This function gathers the rest of the hourly weaather data for the remaining cities
   function tomorrowAll(updateTomorrow){
-    var url = 'http://api.openweathermap.org/data/2.5/forecast?id='+CHICAGO_CODE+'&units=imperial&APPID=' + APPID;
-    $.ajax({
-      dataType: "jsonp",
-      url: url,
-      jsonCallback: 'jsonp',
-      success: function (data) {
-        chicago[2] = data;
-      },
-      error: function(XMLHttpRequest, textStatus, errorThrown){
-        $(".content__weather-container").prepend("<div class=\"error_message slds-align_absolute-center\">Error fetching data. Please try again later!</div>");
-      }
-    });
+    tomorrowAPICall(chicago);
+    tomorrowAPICall(minneapolis);
+    tomorrowAPICall(dallas);
+  }
 
-    url = 'http://api.openweathermap.org/data/2.5/forecast?id='+MINNEAPOLIS_CODE+'&units=imperial&APPID=' + APPID;
+  function tomorrowAPICall(city){
+    var url = 'http://api.openweathermap.org/data/2.5/forecast?id='+city.code+'&units=imperial&APPID=' + APPID;
     $.ajax({
       dataType: "jsonp",
       url: url,
       jsonCallback: 'jsonp',
       success: function (data) {
-        minneapolis[2] = data;
+        city.tomorrow = data;
       },
       error: function(XMLHttpRequest, textStatus, errorThrown){
-        $(".content__weather-container").prepend("<div class=\"error_message slds-align_absolute-center\">Error fetching data. Please try again later!</div>");
-      }
-    });
-
-    url = 'http://api.openweathermap.org/data/2.5/forecast?id='+DALLAS_CODE+'&units=imperial&APPID=' + APPID;
-    $.ajax({
-      dataType: "jsonp",
-      url: url,
-      jsonCallback: 'jsonp',
-      success: function (data) {
-        dallas[2] = data;
-      },
-      error: function(XMLHttpRequest, textStatus, errorThrown){
-        $(".content__weather-container").prepend("<div class=\"error_message slds-align_absolute-center\">Error fetching data. Please try again later!</div>");
+        displayError(".content__weather-container");
+        console.log(err);
       }
     });
   }
@@ -190,23 +156,15 @@ $(document).ready(function() {
 
   function updateHourly(city){
     var currentHour = new Date().getHours();
+    var hr, am_pm;
     for(var i = 0; i < TABLE_ROWS; i++){
-
-      // Workaround for calculating time of day;
-      hr = currentHour + 1 + i;
+      hr = new Date(city.hourly.list[i].dt*1000).getHours();
       am_pm = (hr < 12 || hr > 23 ? "AM" : "PM");
       hr = hr % 12;
       hr = (hr == 0 ? 12 : hr);
-      /*
-      NOTE: This is the preferred way, but doesn't work outside of Chrome
-
-      var dateString = new Date(city[1].list[i].dt_txt + " UTC").toLocaleTimeString();
-      //var num = d1.toLocaleTimeString("en-US", {timeZone: "America/Chicago"}).split(":").current;
-      var am_pm = dateString.split(" ")[1];
-      */
       $("#content__weather-hourly-detail-"+i+"-1").text(hr + " " + am_pm);
-      $("#content__weather-hourly-detail-"+i+"-2").text(Math.round(city[1].list[i].main.temp)+"°F");
-      $("#content__weather-hourly-detail-"+i+"-3 img").attr("src", "http://openweathermap.org/img/w/" + city[1].list[i].weather[0].icon + ".png");
+      $("#content__weather-hourly-detail-"+i+"-2").text(Math.round(city.hourly.list[i].main.temp)+"°F");
+      $("#content__weather-hourly-detail-"+i+"-3 img").attr("src", "http://openweathermap.org/img/w/" + city.hourly.list[i].weather[0].icon + ".png");
     }
   }
 
@@ -218,20 +176,19 @@ $(document).ready(function() {
     var am_pm;
     var rowCount=0;
     // find the index of the next 6 AM entry
-    for(var index = 0; index < city[2].list.length; index++){
-      testDate = new Date(city[2].list[index].dt_txt);
+    for(var index = 3; index < city.tomorrow.list.length; index++){
+      testDate = new Date(city.tomorrow.list[index].dt_txt);
       if (testDate.getHours() == 6) break;
     }
     // construct the next day information
     for(var i = index; i < index + TABLE_ROWS; i++){
-      date = new Date(city[2].list[i].dt_txt);
-      hr = date.getHours();
+      hr = new Date(city.tomorrow.list[i].dt_txt).getHours();
       am_pm = (hr < 12 || hr == 24 ? "AM" : "PM");
       hr = hr % 12;
       hr = (hr == 0 ? 12 : hr);
       $("#content__weather-daily-detail-"+rowCount+"-1").text(hr + " " + am_pm);
-      $("#content__weather-daily-detail-"+rowCount+"-2").text(Math.round(city[2].list[i].main.temp)+"°F");
-      $("#content__weather-daily-detail-"+rowCount+"-3 img").attr("src", "http://openweathermap.org/img/w/" + city[2].list[i].weather[0].icon + ".png");
+      $("#content__weather-daily-detail-"+rowCount+"-2").text(Math.round(city.tomorrow.list[i].main.temp)+"°F");
+      $("#content__weather-daily-detail-"+rowCount+"-3 img").attr("src", "http://openweathermap.org/img/w/" + city.tomorrow.list[i].weather[0].icon + ".png");
       rowCount++;
     }
   }
@@ -299,7 +256,6 @@ $(document).ready(function() {
   function checkPrecipitation(city){
     // Determine if it is raining, and the intensity of the rain
     // clouds are hidden to reduce screen noise
-    console.log(city.current);
     if(city.current.weather[0].main == RAIN){
       $("#background-cloud").removeClass("cloud-animate");
       $("#content__weather-small-clouds").addClass("hide");
