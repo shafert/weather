@@ -45,7 +45,7 @@ $(document).ready(function() {
     setInterval(clock, MINUTE);
   }
   catch(err){
-    $(".content__weather-container").prepend("<div class=\"error_message slds-align_absolute-center\">We have encountered an error. Please try again later!</div>");
+    displayError(".content__weather-container");
     console.log(err);
   }
 
@@ -56,7 +56,7 @@ $(document).ready(function() {
     });
   }
   catch(err){
-    $(".content__weather-container").prepend("<div class=\"error_message slds-align_absolute-center\">We have encountered an error. Please try again later!</div>");
+    displayError(".content__weather-container");
     console.log(err);
   }
 
@@ -67,6 +67,10 @@ $(document).ready(function() {
     updatePage(city);
     updateHourly(city);
     updateTomorrow(city);
+  }
+
+  function displayError(displayClass){
+      $(displayClass).prepend("<div class=\"error_message slds-align_absolute-center\">We have encountered an error. Please try again later!</div>");
   }
 
   // This function hits the current weather API for all 4 cities. The data is stored and then the page is built with the milwaukee information
@@ -84,7 +88,7 @@ $(document).ready(function() {
         callback(milwaukee);
       },
       error: function(XMLHttpRequest, textStatus, errorThrown){
-        $(".content__weather-container").prepend("<div class=\"error_message slds-align_absolute-center\">Error fetching data. Please try again later!</div>");
+        displayError(".content__weather-container");
       }
     });
   }
@@ -101,7 +105,7 @@ $(document).ready(function() {
         callback(milwaukee);
       },
       error: function(XMLHttpRequest, textStatus, errorThrown){
-        $(".column1").prepend("<div class=\"error_message slds-align_absolute-center\">Error fetching data. Please try again later!</div>");
+        displayError(".column1");
       }
     });
   }
@@ -117,7 +121,7 @@ $(document).ready(function() {
         callback(milwaukee, data, updateTomorrow);
       },
       error: function(XMLHttpRequest, textStatus, errorThrown){
-        $(".column3").prepend("<div class=\"error_message slds-align_absolute-center\">Error fetching data. Please try again later!</div>");
+        displayError(".column3");
       }
     });
   }
@@ -146,7 +150,6 @@ $(document).ready(function() {
         },
         error: function(XMLHttpRequest, textStatus, errorThrown){
           displayError(".content__weather-container");
-          console.log(err);
         }
       });
   }
@@ -169,7 +172,6 @@ $(document).ready(function() {
       },
       error: function(XMLHttpRequest, textStatus, errorThrown){
         displayError(".content__weather-container");
-        console.log(err);
       }
     });
   }
