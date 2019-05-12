@@ -9,6 +9,7 @@ $(document).ready(function() {
   const CLOUD_LOW_COVERAGE = 30;
   const CLOUD_HI_COVERAGE = 70;
   const UNIX_FIX = 1000;
+  const MINUTE = 60000;
   const RAIN = "Rain";
   const DRIZZLE = "Drizzle";
   const SNOW = "Snow";
@@ -20,6 +21,11 @@ $(document).ready(function() {
   chicago.code = CHICAGO_CODE;
   minneapolis.code = MINNEAPOLIS_CODE;
   dallas.code = DALLAS_CODE;
+  var cities = [];
+  cities['Milwaukee'] = milwaukee;
+  cities['Chicago'] = chicago;
+  cities['Minneapolis'] = minneapolis;
+  cities['Dallas'] = dallas;
   var raining = false;
   var drops;
 
@@ -36,11 +42,31 @@ $(document).ready(function() {
 
     // Set up & update the clock
     clock();
-    setInterval(clock, 60000);
+    setInterval(clock, MINUTE);
   }
   catch(err){
     $(".content__weather-container").prepend("<div class=\"error_message slds-align_absolute-center\">We have encountered an error. Please try again later!</div>");
     console.log(err);
+  }
+
+  // These update the page information when a new city is selected
+  try{
+    $( ".nav-button" ).click(function() {
+      changeCity($(this).attr("value"));
+    });
+  }
+  catch(err){
+    $(".content__weather-container").prepend("<div class=\"error_message slds-align_absolute-center\">We have encountered an error. Please try again later!</div>");
+    console.log(err);
+  }
+
+  function changeCity(cityName){
+    city = cities[cityName];
+    $("#content__nav-cities li").removeClass("selected");
+    $("#content__nav-cities li."+city.current.name).addClass("selected");
+    updatePage(city);
+    updateHourly(city);
+    updateTomorrow(city);
   }
 
   // This function hits the current weather API for all 4 cities. The data is stored and then the page is built with the milwaukee information
@@ -290,42 +316,6 @@ $(document).ready(function() {
       $(".content__weather-container-cloud").addClass("hide");
       $(".content__weather-container-snow").removeClass("hide");
     }
-  }
-
-  // These update the page information when a new city is selected
-  try{
-    $( "#milwaukee-button" ).click(function() {
-      $("#content__nav-cities li").removeClass("selected");
-      $("#content__nav-cities li.milwaukee").addClass("selected");
-      updatePage(milwaukee);
-      updateHourly(milwaukee);
-      updateTomorrow(milwaukee);
-    });
-    $( "#chicago-button" ).click(function() {
-      $("#content__nav-cities li").removeClass("selected");
-      $("#content__nav-cities li.chicago").addClass("selected");
-      updatePage(chicago);
-      updateHourly(chicago);
-      updateTomorrow(chicago);
-    });
-    $( "#minneapolis-button" ).click(function() {
-      $("#content__nav-cities li").removeClass("selected");
-      $("#content__nav-cities li.minneapolis").addClass("selected");
-      updatePage(minneapolis);
-      updateHourly(minneapolis);
-      updateTomorrow(minneapolis);
-    });
-    $( "#dallas-button" ).click(function() {
-      $("#content__nav-cities li").removeClass("selected");
-      $("#content__nav-cities li.dallas").addClass("selected");
-      updatePage(dallas);
-      updateHourly(dallas);
-      updateTomorrow(dallas);
-    });
-  }
-  catch(err){
-    $(".content__weather-container").prepend("<div class=\"error_message slds-align_absolute-center\">We have encountered an error. Please try again later!</div>");
-    console.log(err);
   }
 
   // returns a random x and y value for the rain
