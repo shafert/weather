@@ -1,4 +1,4 @@
-// These functions load the data for Milwaukee, since that is the city that is displayed when the page is opened.
+// These functions load the data for the first city in the city data list, since that is the city that is displayed when the page is opened.
 
 // This function hits the current weather API for all 4 cities. The data is stored and then the page is built with the milwaukee information
 function onLoadCurrent(cities, cityNames, firstCity, callback) {
