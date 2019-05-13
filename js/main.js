@@ -132,7 +132,7 @@ $(document).ready(function() {
   }
 
   // This function gathers the rest of the hourly weaather data for the remaining cities
-  function hourlyAll(updateHourly){
+  function hourlyAll(){
     hourlyAPICall(chicago);
     hourlyAPICall(minneapolis);
     hourlyAPICall(dallas);
@@ -154,7 +154,7 @@ $(document).ready(function() {
   }
 
   // This function gathers the rest of the hourly weaather data for the remaining cities
-  function tomorrowAll(updateTomorrow){
+  function tomorrowAll(){
     tomorrowAPICall(chicago);
     tomorrowAPICall(minneapolis);
     tomorrowAPICall(dallas);
@@ -185,7 +185,7 @@ $(document).ready(function() {
     var currentHour = new Date().getHours();
     var hr, am_pm;
     for(var i = 0; i < TABLE_ROWS; i++){
-      hr = new Date(city.hourly.list[i].dt*1000).getHours();
+      hr = new Date(city.hourly.list[i].dt*UNIX_FIX).getHours();
       am_pm = (hr < 12 || hr > 23 ? "AM" : "PM");
       hr = hr % 12;
       hr = (hr == 0 ? 12 : hr);
