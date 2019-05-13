@@ -2,13 +2,13 @@ var gulp = require('gulp');
 var concat = require('gulp-concat');
 
 gulp.task('scripts', function() {
-  return gulp.src('js/*.js')
+  return gulp.src('src/js/*.js')
     .pipe(concat('build.js'))
     .pipe(gulp.dest('./build/'));
 });
 
 gulp.task('styles', function() {
-  return gulp.src('css/*.css')
+  return gulp.src('src/css/*.css')
     .pipe(concat('build.css'))
     .pipe(gulp.dest('./build/'));
 });
