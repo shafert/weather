@@ -8,19 +8,22 @@ const MINUTE = 60000;
 const RAIN = "Rain";
 const DRIZZLE = "Drizzle";
 const SNOW = "Snow";
+const AM = "AM";
+const MIN_TOMORROW_START_TIME = 3;
+var raining = false;
+var cityData = [
+  ["Milwaukee", "5263045", "America/Chicago"],
+  ["Chicago", "4887398", "America/Chicago"],
+  ["Minneapolis", "5037649", "America/Chicago"],
+  ["Dallas", "4684888", "America/Chicago"]
+];
 var cityNames = [];
 var cities = [];
 var firstCity;
-var cityData = [
-  ["Milwaukee", "5263045"],
-  ["Chicago", "4887398"],
-  ["Minneapolis", "5037649"],
-  ["Dallas", "4684888"],
-];
-constructArrays(cityData, cities, cityNames);
-var firstCity = cities[cityNames[0]];
-var raining = false;
 
+constructArrays(cityData, cities, cityNames);
+
+firstCity = cities[cityNames[0]];
 
 $(document).ready(function() {
   try{
@@ -46,8 +49,10 @@ $(document).ready(function() {
 
   // These update the page information when a new city is selected
   try{
-    $( ".nav-button" ).on("click", function() {
-      changeCity($(this).attr("value"));
+    $(document).on('click', '.nav-button', function() {
+      if (!$(this).parent().hasClass("selected")){
+        changeCity($(this).attr("value"));
+      }
     });
   }
   catch(err){
@@ -72,6 +77,7 @@ function constructArrays(cityData, cities, cityNames){
     cityNames[i] = cityData[i][0];
     cities[cityNames[i]] = [];
     cities[cityNames[i]].code = cityData[i][1];
+    cities[cityNames[i]].timeZone = cityData[i][2];
   }
 }
 
@@ -83,5 +89,5 @@ function displayError(displayClass){
 // build the clock
 function clock(){
   var curTime = new Date();
-  $("#time").text(curTime.toLocaleTimeString("en-US", {timeZone: "America/Chicago", hour:"2-digit", minute:"2-digit"}));
+  $("#time").text(curTime.toLocaleTimeString("en-US", {timeZone: firstCity.timeZone, hour:"2-digit", minute:"2-digit"}));
 }

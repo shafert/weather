@@ -19,11 +19,10 @@ function onLoadCurrent(cities, cityNames, firstCity, callback) {
       // load each data chunk into the array based on the city name in the received json package
       for (var i = 0; i < cityNames.length; i++){
         cities[data.list[i].name].current = data.list[i];
-        // update the text and the value of the navigation tabs programmatically
-        $(".nav-button:eq("+i+")").text(data.list[i].name);
-        $(".nav-button:eq("+i+")").attr("value", data.list[i].name);
-        $(".content__nav-cities-li:eq("+i+")").addClass(data.list[i].name);
+        // create a tab for each city
+        $("#content__nav-cities").append('<li class="'+data.list[i].name+' content__nav-cities-li"><a href="#" value="'+data.list[i].name+'" class="nav-button">'+data.list[i].name+'</a></li>');
       }
+      $(".content__nav-cities-li:eq(0)").addClass("selected");
       callback(firstCity);
     },
     error: function(XMLHttpRequest, textStatus, errorThrown){

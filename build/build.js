@@ -146,19 +146,22 @@ const MINUTE = 60000;
 const RAIN = "Rain";
 const DRIZZLE = "Drizzle";
 const SNOW = "Snow";
+const AM = "AM";
+const MIN_TOMORROW_START_TIME = 3;
+var raining = false;
+var cityData = [
+  ["Milwaukee", "5263045", "America/Chicago"],
+  ["Chicago", "4887398", "America/Chicago"],
+  ["Minneapolis", "5037649", "America/Chicago"],
+  ["Dallas", "4684888", "America/Chicago"]
+];
 var cityNames = [];
 var cities = [];
 var firstCity;
-var cityData = [
-  ["Milwaukee", "5263045"],
-  ["Chicago", "4887398"],
-  ["Minneapolis", "5037649"],
-  ["Dallas", "4684888"],
-];
-constructArrays(cityData, cities, cityNames);
-var firstCity = cities[cityNames[0]];
-var raining = false;
 
+constructArrays(cityData, cities, cityNames);
+
+firstCity = cities[cityNames[0]];
 
 $(document).ready(function() {
   try{
@@ -184,8 +187,10 @@ $(document).ready(function() {
 
   // These update the page information when a new city is selected
   try{
-    $( ".nav-button" ).on("click", function() {
-      changeCity($(this).attr("value"));
+    $(document).on('click', '.nav-button', function() {
+      if (!$(this).parent().hasClass("selected")){
+        changeCity($(this).attr("value"));
+      }
     });
   }
   catch(err){
@@ -210,6 +215,7 @@ function constructArrays(cityData, cities, cityNames){
     cityNames[i] = cityData[i][0];
     cities[cityNames[i]] = [];
     cities[cityNames[i]].code = cityData[i][1];
+    cities[cityNames[i]].timeZone = cityData[i][2];
   }
 }
 
@@ -221,12 +227,12 @@ function displayError(displayClass){
 // build the clock
 function clock(){
   var curTime = new Date();
-  $("#time").text(curTime.toLocaleTimeString("en-US", {timeZone: "America/Chicago", hour:"2-digit", minute:"2-digit"}));
+  $("#time").text(curTime.toLocaleTimeString("en-US", {timeZone: firstCity.timeZone, hour:"2-digit", minute:"2-digit"}));
 }
 
-// These functions load the data for Milwaukee, since that is the city that is displayed when the page is opened.
+// These functions load the data for the first city in the city data list, since that is the city that is displayed when the page is opened.
 
-// This function hits the current weather API for all 4 cities. The data is stored and then the page is built with the milwaukee information
+// This function hits the current weather API for all 4 cities. The data is stored and then the page is built with the first city's information
 function onLoadCurrent(cities, cityNames, firstCity, callback) {
   var url = 'http://api.openweathermap.org/data/2.5/group?id=';
   for (var i = 0; i < cityNames.length; i++){
@@ -245,11 +251,10 @@ function onLoadCurrent(cities, cityNames, firstCity, callback) {
       // load each data chunk into the array based on the city name in the received json package
       for (var i = 0; i < cityNames.length; i++){
         cities[data.list[i].name].current = data.list[i];
-        // update the text and the value of the navigation tabs programmatically
-        $(".nav-button:eq("+i+")").text(data.list[i].name);
-        $(".nav-button:eq("+i+")").attr("value", data.list[i].name);
-        $(".content__nav-cities-li:eq("+i+")").addClass(data.list[i].name);
+        // create a tab for each city
+        $("#content__nav-cities").append('<li class="'+data.list[i].name+' content__nav-cities-li"><a href="#" value="'+data.list[i].name+'" class="nav-button">'+data.list[i].name+'</a></li>');
       }
+      $(".content__nav-cities-li:eq(0)").addClass("selected");
       callback(firstCity);
     },
     error: function(XMLHttpRequest, textStatus, errorThrown){
@@ -321,6 +326,8 @@ function destroyRain(){
 function updatePage(city){
   $(".spinner").addClass("hide");
   $(".toggles").addClass("hide");
+  var curTime = new Date(city.current.dt*UNIX_MULTIPLIER);
+  $("#time").text(curTime.toLocaleTimeString("en-US", {timeZone: city.timeZone, hour:"2-digit", minute:"2-digit"}));
   $("#temperature").text(Math.round(city.current.main.temp) + "°F");
   // checkWeather.js
   checkClouds(city);
@@ -331,9 +338,11 @@ function updatePage(city){
 function updateHourly(city){
   var currentHour = new Date().getHours();
   var hourInfo;
+  var hourlyTime;
   for(var i = 0; i < TABLE_ROWS; i++){
-    hourInfo = localHour(city.hourly.list[i].dt*UNIX_MULTIPLIER);
-    $("#content__weather-hourly-detail-"+i+"-1").text(hourInfo.hr + " " + hourInfo.am_pm);
+    hourlyTime = new Date(city.hourly.list[i].dt*UNIX_MULTIPLIER);
+    hourInfo = hourlyTime.toLocaleTimeString("en-US", {timeZone: city.timeZone, hour:"2-digit", hour12:"true"});
+    $("#content__weather-hourly-detail-"+i+"-1").text(hourInfo);
     $("#content__weather-hourly-detail-"+i+"-2").text(Math.round(city.hourly.list[i].main.temp)+"°F");
     $("#content__weather-hourly-detail-"+i+"-3 img").attr("src", "http://openweathermap.org/img/w/" + city.hourly.list[i].weather[0].icon + ".png");
   }
@@ -346,31 +355,22 @@ function updateTomorrow(city){
   var hourInfo;
   var am_pm;
   var rowCount=0;
-  // find the index of the next 6 AM entry
-  for(var index = 3; index < city.tomorrow.list.length; index++){
-    testDate = new Date(city.tomorrow.list[index].dt_txt);
-    if (testDate.getHours() == 6) break;
+  var timeInfo;
+  // find the index of the next morning entry
+  for(var index = 0; index < city.tomorrow.list.length; index++){
+    testDate = new Date(city.tomorrow.list[index].dt*UNIX_MULTIPLIER);
+    testHour = testDate.toLocaleTimeString("en-US", {timeZone: city.timeZone, hour:"2-digit", hour12:"false"});
+    timeInfo = testHour.split(" ");
+    // row data is for 3AM or later
+    if (timeInfo[1] == AM && parseInt(timeInfo[0]) >= MIN_TOMORROW_START_TIME) break;
   }
   // construct the next day information
   for(var i = index; i < index + TABLE_ROWS; i++){
-    hourInfo = localHour(city.tomorrow.list[i].dt_txt);
-    $("#content__weather-daily-detail-"+rowCount+"-1").text(hourInfo.hr + " " + hourInfo.am_pm);
+    hourlyTime = new Date(city.tomorrow.list[i].dt*UNIX_MULTIPLIER);
+    hourInfo = hourlyTime.toLocaleTimeString("en-US", {timeZone: city.timeZone, hour:"2-digit", hour12:"true"});
+    $("#content__weather-daily-detail-"+rowCount+"-1").text(hourInfo);
     $("#content__weather-daily-detail-"+rowCount+"-2").text(Math.round(city.tomorrow.list[i].main.temp)+"°F");
     $("#content__weather-daily-detail-"+rowCount+"-3 img").attr("src", "http://openweathermap.org/img/w/" + city.tomorrow.list[i].weather[0].icon + ".png");
     rowCount++;
   }
-}
-
-function localHour(dateTime){
-  var date = new Date(dateTime);
-  var hourInfo = [];
-  var hr;
-  var am_pm;
-  hr = date.getHours();
-  am_pm = (hr < 12 || hr > 23 ? "AM" : "PM");
-  hr = hr % 12;
-  hr = (hr == 0 ? 12 : hr);
-  hourInfo.hr = hr;
-  hourInfo.am_pm = am_pm;
-  return hourInfo;
 }
