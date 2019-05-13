@@ -22,4 +22,9 @@ gulp.task('compress', function(done) {
     done();
 });
 
-gulp.task('build', gulp.series('scripts', 'styles', 'compress'))
+gulp.task('watch', function() {
+   gulp.watch('src/js/*.js', gulp.series('scripts'));
+   gulp.watch('src/css/*.css', gulp.series('styles'));
+});
+
+gulp.task('default', gulp.series('scripts', 'styles', 'compress', 'watch'))
