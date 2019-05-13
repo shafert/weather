@@ -1,8 +1,4 @@
 const TABLE_ROWS = 8;
-const MILWAUKEE_CODE = "5263045";
-const CHICAGO_CODE = "4887398";
-const MINNEAPOLIS_CODE = "5037649";
-const DALLAS_CODE = "4684888";
 const APPID = "5dfa9c5274bb50d7ada514fc482db59d";
 const CLOUD_NO_COVERAGE = 10;
 const CLOUD_LOW_COVERAGE = 30;
@@ -12,36 +8,32 @@ const MINUTE = 60000;
 const RAIN = "Rain";
 const DRIZZLE = "Drizzle";
 const SNOW = "Snow";
-var milwaukee = [];
-var chicago = [];
-var minneapolis = [];
-var dallas = [];
-milwaukee.code = MILWAUKEE_CODE;
-chicago.code = CHICAGO_CODE;
-minneapolis.code = MINNEAPOLIS_CODE;
-dallas.code = DALLAS_CODE;
+var cityNames = [];
 var cities = [];
-var cityNames = ['Milwaukee', 'Chicago', 'Minneapolis', 'Dallas'];
-cities['Milwaukee'] = milwaukee;
-cities['Chicago'] = chicago;
-cities['Minneapolis'] = minneapolis;
-cities['Dallas'] = dallas;
+var firstCity;
+var cityData = [
+  ["Milwaukee", "5263045"],
+  ["Chicago", "4887398"],
+  ["Minneapolis", "5037649"],
+  ["Dallas", "4684888"],
+];
+constructArrays(cityData, cities, cityNames);
+var firstCity = cities[cityNames[0]];
 var raining = false;
 
 
 $(document).ready(function() {
-  // Main code block which calls the functions that hit the API and begin to construct the page
   try{
     // These three calls load the initial page data
     // functions found in onLoad.js
-    onLoadCurrent(updatePage);
-    onLoadHourly(updateHourly);
-    onLoadTomorrow(loadData);
+    onLoadCurrent(cities, cityNames, firstCity, updatePage);
+    onLoadHourly(firstCity, updateHourly);
+    onLoadTomorrow(firstCity, loadData);
 
     // These two calls load the rest of the hourly and tomorrow's weather data
     // functions found in API.js
-    hourlyAll();
-    tomorrowAll();
+    remainingHourlyForecasts();
+    remainingTomorrowForecasts();
 
     // Set up & update the clock
     clock();
@@ -54,7 +46,7 @@ $(document).ready(function() {
 
   // These update the page information when a new city is selected
   try{
-    $( ".nav-button" ).click(function() {
+    $( ".nav-button" ).on("click", function() {
       changeCity($(this).attr("value"));
     });
   }
@@ -64,14 +56,23 @@ $(document).ready(function() {
   }
 });
 
-// functions found in update.js
+// update the page information when a new city has been selected
 function changeCity(cityName){
   city = cities[cityName];
   $("#content__nav-cities li").removeClass("selected");
   $("#content__nav-cities li."+city.current.name).addClass("selected");
+  // functions found in update.js
   updatePage(city);
   updateHourly(city);
   updateTomorrow(city);
+}
+
+function constructArrays(cityData, cities, cityNames){
+  for(var i = 0; i < cityData.length; i ++){
+    cityNames[i] = cityData[i][0];
+    cities[cityNames[i]] = [];
+    cities[cityNames[i]].code = cityData[i][1];
+  }
 }
 
 // prepends the error message to the relevant section

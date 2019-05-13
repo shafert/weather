@@ -1,18 +1,16 @@
 // This function gathers the rest of the hourly weaather data for the remaining cities
-function hourlyAll(){
-  for(var i = 0; i < cityNames.length; i++){
-    if(cityNames[i] != 'Milwaukee'){
-      hourlyAPICall(cities[cityNames[i]]);
-    }
+function remainingHourlyForecasts(){
+  // start at 1 because the first city's data has been loaded
+  for(var i = 1; i < cityNames.length; i++){
+    hourlyAPICall(cities[cityNames[i]]);
   }
 }
 
 // This function gathers the rest of the hourly weaather data for the remaining cities
-function tomorrowAll(){
-  for(var i = 0; i < cityNames.length; i++){
-    if(cityNames[i] != 'Milwaukee'){
-      tomorrowAPICall(cities[cityNames[i]]);
-    }
+function remainingTomorrowForecasts(){
+  // start at 1 because the first city's data has been loaded
+  for(var i =  1; i < cityNames.length; i++){
+    tomorrowAPICall(cities[cityNames[i]]);
   }
 }
 
