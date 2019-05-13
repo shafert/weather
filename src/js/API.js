@@ -19,7 +19,6 @@ function hourlyAPICall(city){
     $.ajax({
       dataType: "jsonp",
       url: url,
-      jsonCallback: 'jsonp',
       success: function (data) {
         city.hourly = data;
       },
@@ -34,7 +33,6 @@ function tomorrowAPICall(city){
   $.ajax({
     dataType: "jsonp",
     url: url,
-    jsonCallback: 'jsonp',
     success: function (data) {
       city.tomorrow = data;
     },

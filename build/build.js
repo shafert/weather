@@ -19,7 +19,6 @@ function hourlyAPICall(city){
     $.ajax({
       dataType: "jsonp",
       url: url,
-      jsonCallback: 'jsonp',
       success: function (data) {
         city.hourly = data;
       },
@@ -34,7 +33,6 @@ function tomorrowAPICall(city){
   $.ajax({
     dataType: "jsonp",
     url: url,
-    jsonCallback: 'jsonp',
     success: function (data) {
       city.tomorrow = data;
     },
@@ -212,7 +210,7 @@ function changeCity(cityName){
 
 function constructArrays(cityData, cities, cityNames){
   for(var i = 0; i < cityData.length; i ++){
-    cityNames[i] = cityData[i][0];
+    currentCityName = cityNames[i] = cityData[i][0];
     cities[cityNames[i]] = [];
     cities[cityNames[i]].code = cityData[i][1];
     cities[cityNames[i]].timeZone = cityData[i][2];
@@ -242,17 +240,17 @@ function onLoadCurrent(cities, cityNames, firstCity, callback) {
     }
   }
   url +=  '&units=imperial&APPID=' + APPID;
-
+  var currentCityName;
   $.ajax({
     dataType: "jsonp",
     url: url,
-    jsonCallback: 'jsonp',
     success: function (data) {
       // load each data chunk into the array based on the city name in the received json package
-      for (var i = 0; i < cityNames.length; i++){
-        cities[data.list[i].name].current = data.list[i];
+      for (var i = 0; i < data.list.length; i++){
+        currentCityName = data.list[i].name;
+        cities[currentCityName].current = data.list[i];
         // create a tab for each city
-        $("#content__nav-cities").append('<li class="'+data.list[i].name+' content__nav-cities-li"><a href="#" value="'+data.list[i].name+'" class="nav-button">'+data.list[i].name+'</a></li>');
+        $("#content__nav-cities").append('<li class="' + currentCityName + ' content__nav-cities-li"><a href="#" value="' + currentCityName + '" class="nav-button">' + currentCityName + '</a></li>');
       }
       $(".content__nav-cities-li:eq(0)").addClass("selected");
       callback(firstCity);
@@ -269,7 +267,6 @@ function onLoadHourly(firstCity, callback) {
   $.ajax({
     dataType: "jsonp",
     url: url,
-    jsonCallback: 'jsonp',
     success: function (data) {
       firstCity.hourly = data;
       callback(firstCity);
@@ -286,7 +283,6 @@ function onLoadTomorrow(firstCity, callback) {
   $.ajax({
     dataType: "jsonp",
     url: url,
-    jsonCallback: 'jsonp',
     success: function (data) {
       callback(firstCity, data, updateTomorrow);
     },
@@ -329,14 +325,13 @@ function updatePage(city){
   var curTime = new Date(city.current.dt*UNIX_MULTIPLIER);
   $("#time").text(curTime.toLocaleTimeString("en-US", {timeZone: city.timeZone, hour:"2-digit", minute:"2-digit"}));
   $("#temperature").text(Math.round(city.current.main.temp) + "°F");
-  // checkWeather.js
+  // functions in checkWeather.js
   checkClouds(city);
   checkNight(city);
   checkPrecipitation(city);
 }
 
 function updateHourly(city){
-  var currentHour = new Date().getHours();
   var hourInfo;
   var hourlyTime;
   for(var i = 0; i < TABLE_ROWS; i++){
@@ -350,17 +345,17 @@ function updateHourly(city){
 
 // This function updates the data in the tomorrow column
 function updateTomorrow(city){
-  var testDate;
-  var date;
-  var hourInfo;
-  var am_pm;
+  var rowDate;
+  var rowTime;
   var rowCount=0;
   var timeInfo;
+  var hourlyTime;
+  var hourInfo;
   // find the index of the next morning entry
   for(var index = 0; index < city.tomorrow.list.length; index++){
-    testDate = new Date(city.tomorrow.list[index].dt*UNIX_MULTIPLIER);
-    testHour = testDate.toLocaleTimeString("en-US", {timeZone: city.timeZone, hour:"2-digit", hour12:"false"});
-    timeInfo = testHour.split(" ");
+    rowDate = new Date(city.tomorrow.list[index].dt*UNIX_MULTIPLIER);
+    rowTime = rowDate.toLocaleTimeString("en-US", {timeZone: city.timeZone, hour:"2-digit", hour12:"false"});
+    timeInfo = rowTime.split(" ");
     // row data is for 3AM or later
     if (timeInfo[1] == AM && parseInt(timeInfo[0]) >= MIN_TOMORROW_START_TIME) break;
   }

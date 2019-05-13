@@ -5,14 +5,13 @@ function updatePage(city){
   var curTime = new Date(city.current.dt*UNIX_MULTIPLIER);
   $("#time").text(curTime.toLocaleTimeString("en-US", {timeZone: city.timeZone, hour:"2-digit", minute:"2-digit"}));
   $("#temperature").text(Math.round(city.current.main.temp) + "°F");
-  // checkWeather.js
+  // functions in checkWeather.js
   checkClouds(city);
   checkNight(city);
   checkPrecipitation(city);
 }
 
 function updateHourly(city){
-  var currentHour = new Date().getHours();
   var hourInfo;
   var hourlyTime;
   for(var i = 0; i < TABLE_ROWS; i++){
@@ -26,17 +25,17 @@ function updateHourly(city){
 
 // This function updates the data in the tomorrow column
 function updateTomorrow(city){
-  var testDate;
-  var date;
-  var hourInfo;
-  var am_pm;
+  var rowDate;
+  var rowTime;
   var rowCount=0;
   var timeInfo;
+  var hourlyTime;
+  var hourInfo;
   // find the index of the next morning entry
   for(var index = 0; index < city.tomorrow.list.length; index++){
-    testDate = new Date(city.tomorrow.list[index].dt*UNIX_MULTIPLIER);
-    testHour = testDate.toLocaleTimeString("en-US", {timeZone: city.timeZone, hour:"2-digit", hour12:"false"});
-    timeInfo = testHour.split(" ");
+    rowDate = new Date(city.tomorrow.list[index].dt*UNIX_MULTIPLIER);
+    rowTime = rowDate.toLocaleTimeString("en-US", {timeZone: city.timeZone, hour:"2-digit", hour12:"false"});
+    timeInfo = rowTime.split(" ");
     // row data is for 3AM or later
     if (timeInfo[1] == AM && parseInt(timeInfo[0]) >= MIN_TOMORROW_START_TIME) break;
   }
