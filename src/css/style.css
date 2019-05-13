@@ -34,16 +34,16 @@
 }
 
 #content__nav-cities{
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  width: 100%;
+  list-style-type: none;
+  display: table;
+  margin: 0;
+  padding: 0;
 }
 
 .content__nav-cities-li{
-  width:25%;
-  list-style: none;
-  display: inline-block;
-  text-align: center;
+  display: table-cell;
+  max-width: 0;
 }
 
 .content__nav-cities-li a{
