@@ -13,7 +13,7 @@ npm install
 build the concatenated js/css files when the source files have been modified
 
 ```
-gulp build
+gulp
 ```
 
 Set up on your favorite server and give it a whirl
