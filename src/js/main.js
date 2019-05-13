@@ -74,7 +74,7 @@ function changeCity(cityName){
 
 function constructArrays(cityData, cities, cityNames){
   for(var i = 0; i < cityData.length; i ++){
-    cityNames[i] = cityData[i][0];
+    currentCityName = cityNames[i] = cityData[i][0];
     cities[cityNames[i]] = [];
     cities[cityNames[i]].code = cityData[i][1];
     cities[cityNames[i]].timeZone = cityData[i][2];

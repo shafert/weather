@@ -10,17 +10,17 @@ function onLoadCurrent(cities, cityNames, firstCity, callback) {
     }
   }
   url +=  '&units=imperial&APPID=' + APPID;
-
+  var currentCityName;
   $.ajax({
     dataType: "jsonp",
     url: url,
-    jsonCallback: 'jsonp',
     success: function (data) {
       // load each data chunk into the array based on the city name in the received json package
-      for (var i = 0; i < cityNames.length; i++){
-        cities[data.list[i].name].current = data.list[i];
+      for (var i = 0; i < data.list.length; i++){
+        currentCityName = data.list[i].name;
+        cities[currentCityName].current = data.list[i];
         // create a tab for each city
-        $("#content__nav-cities").append('<li class="'+data.list[i].name+' content__nav-cities-li"><a href="#" value="'+data.list[i].name+'" class="nav-button">'+data.list[i].name+'</a></li>');
+        $("#content__nav-cities").append('<li class="' + currentCityName + ' content__nav-cities-li"><a href="#" value="' + currentCityName + '" class="nav-button">' + currentCityName + '</a></li>');
       }
       $(".content__nav-cities-li:eq(0)").addClass("selected");
       callback(firstCity);
@@ -37,7 +37,6 @@ function onLoadHourly(firstCity, callback) {
   $.ajax({
     dataType: "jsonp",
     url: url,
-    jsonCallback: 'jsonp',
     success: function (data) {
       firstCity.hourly = data;
       callback(firstCity);
@@ -54,7 +53,6 @@ function onLoadTomorrow(firstCity, callback) {
   $.ajax({
     dataType: "jsonp",
     url: url,
-    jsonCallback: 'jsonp',
     success: function (data) {
       callback(firstCity, data, updateTomorrow);
     },
